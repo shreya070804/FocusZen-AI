@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FocusZen AI • Focus Timer & Mindful Ambient Sound</title>
+  <meta name="description" content="A mindful focus timer and ambient sound portal to shield distractions, boost productivity, and improve wellness.">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Lucide Icons CDN for crisp glowing iconography -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Mockup Smart Phone Shell -->
+  <div class="phone-shell">
+    
+    <!-- Premium System Startup Loading Loader -->
+    <div id="system-startup-loader" class="system-startup-loader">
+      <div class="loader-logo-glow">
+        <i data-lucide="shield-check" style="width: 32px; height: 32px; color: var(--neon-purple);"></i>
+      </div>
+      <div style="text-align: center; font-family: 'JetBrains Mono', monospace; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-size: 11px; font-weight: 700; color: var(--text-primary); letter-spacing: 0.15em;">FOCUSZEN</span>
+        <span id="startup-loader-status" style="font-size: 8px; color: var(--neon-blue); letter-spacing: 0.05em; text-transform: uppercase;">Preparing your focus space...</span>
+      </div>
+      <div style="width: 140px; height: 3px; background: rgba(255, 255, 255, 0.02); border-radius: 2px; border: 1px solid rgba(255, 255, 255, 0.05); overflow: hidden; position: relative;">
+        <div id="startup-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue)); box-shadow: 0 0 6px var(--neon-purple-glow); transition: width 0.1s linear;"></div>
+      </div>
+    </div>
+
+    <!-- Onboarding Flow Overlay -->
+    <div id="onboarding-overlay" class="onboarding-overlay" style="display: none;">
+      <!-- Slide 1: Welcome -->
+      <div class="onboarding-slide active" id="onboard-slide-1">
+        <div class="onboarding-icon">
+          <i data-lucide="shield-check" style="width: 36px; height: 36px; color: var(--neon-purple);"></i>
+        </div>
+        <h2>Welcome to FocusZen</h2>
+        <p>A calm, distraction-free space designed to help you find your flow and stay focused.</p>
+        <button class="onboarding-btn next-btn" data-next="2">Get Started</button>
+      </div>
+
+      <!-- Slide 2: Choose Goal -->
+      <div class="onboarding-slide" id="onboard-slide-2">
+        <div class="onboarding-icon">
+          <i data-lucide="target" style="width: 36px; height: 36px; color: var(--neon-blue);"></i>
+        </div>
+        <h2>Select Your Goal</h2>
+        <p>What is your primary focus objective today?</p>
+        <div class="goal-options">
+          <div class="goal-option active" data-goal="deep-work">
+            <i data-lucide="brain"></i>
+            <span>Deep Work Focus</span>
+          </div>
+          <div class="goal-option" data-goal="wellness">
+            <i data-lucide="heart"></i>
+            <span>Mindful Wellness</span>
+          </div>
+          <div class="goal-option" data-goal="consistency">
+            <i data-lucide="calendar"></i>
+            <span>Daily Consistency</span>
+          </div>
+        </div>
+        <button class="onboarding-btn next-btn" data-next="3">Continue</button>
+      </div>
+
+      <!-- Slide 3: Reminders -->
+      <div class="onboarding-slide" id="onboard-slide-3">
+        <div class="onboarding-icon">
+          <i data-lucide="bell" style="width: 36px; height: 36px; color: var(--neon-pink);"></i>
+        </div>
+        <h2>Focus Reminders</h2>
+        <p>Enable gentle notifications to keep your streak active and take restorative rests.</p>
+        <button class="onboarding-btn finish-btn" id="onboard-finish-btn">Enable & Enter</button>
+      </div>
+    </div>
+
+    <!-- Phone Top Status Bar -->
+    <div class="status-bar">
+      <span class="time" id="status-bar-time">12:00</span>
+      <div class="island"></div>
+      <div class="right-icons">
+        <i data-lucide="signal" style="width: 14px; height: 14px; opacity: 0.9;"></i>
+        <i data-lucide="wifi" style="width: 14px; height: 14px; opacity: 0.9;"></i>
+        <i data-lucide="battery" style="width: 14px; height: 14px; opacity: 0.9;"></i>
+      </div>
+    </div>
+
+    <!-- Slide-down Toast Alert Banner -->
+    <div id="neon-toast-alert" class="neon-toast-container">
+      <div class="toast-content">
+        <div class="toast-icon-wrap">
+          <i data-lucide="bell-ring" id="toast-icon"></i>
+        </div>
+        <div class="toast-text">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="toast-tag" id="toast-tag">Focus Alert</span>
+          </div>
+          <span class="toast-title" id="toast-title">Great Focus Session!</span>
+          <p class="toast-message" id="toast-message">You are building a great habit. Keep going!</p>
+        </div>
+      </div>
+      <div class="toast-glow-line"></div>
+    </div>
+
+    <!-- Achievement Unlock Toast Banner -->
+    <div id="achievement-unlock-popup" class="neon-toast-container">
+      <div class="toast-content">
+        <div class="toast-icon-wrap" style="background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.3); color: var(--neon-blue); filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.45));">
+          <i data-lucide="award"></i>
+        </div>
+        <div class="toast-text">
+          <span class="toast-tag" style="color: var(--neon-blue);">ACHIEVEMENT UNLOCKED</span>
+          <span class="toast-title" id="unlock-badge-name">Focus Explorer</span>
+          <p class="toast-message" id="unlock-badge-desc">You unlocked a new focus milestone!</p>
+        </div>
+      </div>
+      <div class="toast-glow-line" style="background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); box-shadow: 0 0 6px var(--neon-blue-glow);"></div>
+    </div>
+
+    <!-- Scrollable Main Viewport -->
+    <div class="app-content">
+
+      <!-- ================= SCREEN 1: HOME ================= -->
+      <div id="screen-home" class="screen active">
+        <!-- App Header with Personalized Greetings -->
+        <header class="app-header">
+          <div class="user-info">
+            <span class="tech-label">Mindful Focus</span>
+            <h1 id="user-greeting">Welcome, Shreya</h1>
+            <p>Ready to make today productive and calm?</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="home-notification-btn" class="header-icon-btn" title="Notifications" style="position: relative;">
+              <i data-lucide="bell"></i>
+              <span id="notification-badge" class="badge-dot" style="display: none; position: absolute; top: 0px; right: 0px; width: 6px; height: 6px; background: var(--neon-pink); border-radius: 50%; box-shadow: 0 0 6px var(--neon-pink-glow);"></span>
+            </button>
+            <button id="home-settings-btn" class="header-icon-btn" title="Settings">
+              <i data-lucide="settings"></i>
+            </button>
+            <div class="avatar-glow" id="home-avatar-btn" style="cursor: pointer;">
+              <img src="assets/shreya_avatar.png" alt="Shreya's Avatar" id="user-avatar-img">
+            </div>
+          </div>
+        </header>
+
+        <!-- Animated Circular Zen Score Ring -->
+        <div class="glass-panel purple-glow" id="zen-ring-trigger" style="cursor: pointer;">
+          <span class="tech-label">Daily Summary</span>
+          <div class="zen-score-container">
+            <div class="zen-ring-wrapper">
+              <div class="zen-ring-glow-ring"></div>
+              <svg viewBox="0 0 200 200">
+                <defs>
+                  <linearGradient id="zenGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#a855f7" />
+                    <stop offset="50%" stop-color="#ec4899" />
+                    <stop offset="100%" stop-color="#06b6d4" />
+                  </linearGradient>
+                </defs>
+                <circle class="zen-ring-bg" cx="100" cy="100" r="85" />
+                <circle class="zen-ring-fill" id="zen-ring-fill" cx="100" cy="100" r="85" />
+              </svg>
+              <div class="zen-score-text">
+                <span class="zen-score-num" id="zen-score-value">88%</span>
+                <span class="zen-score-label">Focus Score</span>
+              </div>
+            </div>
+            
+            <div class="zen-status-badge">
+              <i data-lucide="zap"></i>
+              <span id="zen-status-text">CALM AND STEADY</span>
+            </div>
+
+            <!-- Dynamic Daily Mini Stats Grid -->
+            <div class="daily-mini-stats" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; border-top: 1px solid rgba(255, 255, 255, 0.04); padding-top: 14px; margin-top: 14px; text-align: center; font-family: 'JetBrains Mono', monospace;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span id="daily-sessions-count" style="font-size: 14px; font-weight: 700; color: var(--neon-purple); text-shadow: 0 0 6px rgba(168, 85, 247, 0.25);">2</span>
+                <span style="font-size: 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Sessions</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span id="daily-focus-time" style="font-size: 14px; font-weight: 700; color: var(--neon-blue); text-shadow: 0 0 6px rgba(6, 182, 212, 0.25);">1h 45m</span>
+                <span style="font-size: 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Focused</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span id="daily-focus-consistency" style="font-size: 14px; font-weight: 700; color: var(--neon-pink); text-shadow: 0 0 6px rgba(236, 72, 153, 0.25);">87%</span>
+                <span style="font-size: 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Flow Rate</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span id="daily-focus-interruptions" style="font-size: 14px; font-weight: 700; color: #ef4444; text-shadow: 0 0 6px rgba(239, 68, 68, 0.25);">0</span>
+                <span style="font-size: 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Alerts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metrics & Streaks Row Grid -->
+        <div class="metrics-grid">
+          <!-- Streak Card -->
+          <div class="metric-card purple">
+            <div class="metric-header">
+              <span>Focus Streak</span>
+              <div class="metric-icon-wrap">
+                <i data-lucide="flame" style="width: 16px; height: 16px;"></i>
+              </div>
+            </div>
+            <span class="metric-value" id="metric-streak-value">8 Days</span>
+            <span class="metric-sub" id="metric-streak-sub">
+              <span class="trend-up"><i data-lucide="arrow-up-right" style="width: 10px; height: 10px; display: inline-block; vertical-align: middle;"></i> +2d</span> vs last week
+            </span>
+          </div>
+
+          <!-- Deep work Ratio Card -->
+          <div class="metric-card blue">
+            <div class="metric-header">
+              <span>Deep Ratio</span>
+              <div class="metric-icon-wrap">
+                <i data-lucide="brain" style="width: 16px; height: 16px;"></i>
+              </div>
+            </div>
+            <span class="metric-value" id="metric-deep-ratio-value">92%</span>
+            <span class="metric-sub" id="metric-deep-ratio-sub">
+              <span class="trend-up"><i data-lucide="arrow-up-right" style="width: 10px; height: 10px; display: inline-block; vertical-align: middle;"></i> +5%</span> focus stability
+            </span>
+          </div>
+        </div>
+
+        <!-- AI Insight Card -->
+        <div class="glass-panel blue-glow ai-insight-card" style="padding: 14px; margin-bottom: 20px;">
+          <div class="ai-header-bar" style="margin-bottom: 12px;">
+            <div class="ai-badge">
+              <i data-lucide="sparkles"></i>
+              <span id="ai-card-title">YOUR AI FOCUS COACH</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button id="ai-tab-coach" class="ai-tab-btn active" style="font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--neon-blue); background: rgba(6, 182, 212, 0.1); color: var(--text-primary); cursor: pointer; transition: var(--transition-smooth); outline: none;">COACH</button>
+              <button id="ai-tab-insights" class="ai-tab-btn" style="font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); background: transparent; color: var(--text-secondary); cursor: pointer; transition: var(--transition-smooth); outline: none;">INSIGHTS</button>
+            </div>
+          </div>
+          
+          <!-- TAB 1: Chat Viewport -->
+          <div id="ai-chat-container" class="ai-tab-content active">
+            <!-- Scrollable Viewport -->
+            <div class="ai-chat-viewport" id="ai-chat-viewport">
+              <div class="ai-msg coach">
+                <div class="ai-msg-avatar"><i data-lucide="sparkles" style="width:12px; height:12px;"></i></div>
+                <div class="ai-msg-text">Greetings, Shreya. I am your FocusZen AI Coach. Link your Gemini API key in settings to unlock personalized tips, or let's start a session to find your flow today. How can I help you focus?</div>
+              </div>
+            </div>
+            
+            <!-- Chat Input Wrap -->
+            <div class="ai-chat-input-wrap">
+              <input type="text" id="ai-chat-input" placeholder="Ask your Coach... (e.g. How do I stay focused?)" autocomplete="off">
+              <button id="ai-send-btn" title="Send Message">
+                <i data-lucide="arrow-up" style="width: 14px; height: 14px;"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- TAB 2: Insights & Recommendations Viewport -->
+          <div id="ai-insights-container" class="ai-tab-content" style="display: none;">
+            <div class="ai-content" style="min-height: 90px; margin-bottom: 12px; font-size: 13px;">
+              <p id="ai-insight-text">Preparing your focus logs and insights...</p>
+            </div>
+            <div class="ai-insight-actions" style="border-top: 1px solid rgba(255, 255, 255, 0.04); padding-top: 10px;">
+              <button class="ai-refresh-btn" id="ai-sync-btn">
+                <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+                <span>Refresh Insights</span>
+              </button>
+              <div class="neural-flow-indicator">
+                <div class="neural-node active"></div>
+                <div class="neural-node active"></div>
+                <div class="neural-node active"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Glowing Call-to-action Button -->
+        <div class="cta-container">
+          <button class="btn-glowing-glow" id="start-focus-btn">
+            <i data-lucide="play" style="fill: currentColor; width: 16px; height: 16px;"></i>
+            <span>START FOCUS SESSION</span>
+          </button>
+          <div class="btn-glow-backdrop"></div>
+        </div>
+      </div>
+
+      <!-- ================= SCREEN 2: ANALYTICS ================= -->
+      <div id="screen-analytics" class="screen">
+        <header class="app-header" style="margin-bottom: 16px;">
+          <div class="user-info">
+            <span class="tech-label blue">Your Analytics</span>
+            <h1>Focus Analytics</h1>
+            <p>Your weekly deep work overview.</p>
+          </div>
+        </header>
+
+        <!-- Stats Overview Cards -->
+        <div class="metrics-grid" style="margin-bottom: 16px;">
+          <div class="metric-card blue" style="padding: 12px 14px;">
+            <span class="tech-label blue" style="font-size: 9px; margin-bottom: 4px;">Total Focus Time</span>
+            <span class="metric-value" id="stats-total-hours" style="font-size: 18px;">34.3 hrs</span>
+          </div>
+          <div class="metric-card purple" style="padding: 12px 14px;">
+            <span class="tech-label" style="font-size: 9px; margin-bottom: 4px;">Average Focus Score</span>
+            <span class="metric-value" id="stats-avg-score" style="font-size: 18px;">89.4%</span>
+          </div>
+        </div>
+
+        <!-- Weekly Analytics SVG Graph Card -->
+        <div class="glass-panel blue-glow" style="padding: 16px 14px;">
+          <span class="tech-label blue">WEEKLY FOCUS TIME</span>
+          <h2 style="font-size: 16px; margin-bottom: 0px;">Focus Hours by Day</h2>
+          
+          <div class="analytics-chart-container" id="analytics-chart-wrap">
+            <!-- Drawn Dynamically via JS (Inline SVG support with hover coordinate overlay) -->
+          </div>
+          
+          <div class="chart-labels-x">
+            <span>MON</span>
+            <span>TUE</span>
+            <span>WED</span>
+            <span>THU</span>
+            <span>FRI</span>
+            <span>SAT</span>
+            <span>SUN</span>
+          </div>
+
+          <div class="chart-legend">
+            <div class="legend-item">
+              <span class="legend-color purple"></span>
+              <span>Focus Time</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color blue"></span>
+              <span>Daily Goal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gamified Holographic Achievements Node -->
+        <div class="glass-panel purple-glow" style="padding: 16px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <span class="tech-label">Focus Milestones</span>
+              <h2 style="font-size: 16px; margin: 0;">Your Badges</h2>
+            </div>
+            <div style="text-align: right;">
+              <span id="user-level-label" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--neon-blue);">LEVEL 1</span>
+              <div style="font-size: 9px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; margin-top: 2px;" id="user-xp-label">0 / 500 XP</div>
+            </div>
+          </div>
+          
+          <!-- XP Progress Bar -->
+          <div style="height: 6px; background: rgba(255,255,255,0.03); border-radius: 3px; overflow: hidden; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.05); position: relative;">
+            <div id="user-xp-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); box-shadow: 0 0 8px var(--neon-blue-glow); transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+          </div>
+          
+          <!-- Achievements Grid of Holographic Cards -->
+          <div class="achievements-grid" id="achievements-cards-grid">
+            <!-- Injected dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Performance Distribution Card -->
+        <div class="glass-panel" style="padding: 16px;">
+          <span class="tech-label pink">Focus Breakdown</span>
+          <h2>Focus & Wellness Balance</h2>
+          
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; color: var(--text-secondary);">
+                <span>Deep Work Focus</span>
+                <span id="allocation-focus-pct" style="font-family: 'JetBrains Mono', monospace; color: var(--neon-purple);">72%</span>
+              </div>
+              <div style="height: 4px; background: rgba(255,255,255,0.03); border-radius: 2px; overflow: hidden;">
+                <div id="allocation-focus-bar" style="width: 72%; height: 100%; background: var(--neon-purple); box-shadow: 0 0 6px var(--neon-purple-glow);"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; color: var(--text-secondary);">
+                <span>Mindful Breathing</span>
+                <span id="allocation-breath-pct" style="font-family: 'JetBrains Mono', monospace; color: var(--neon-blue);">18%</span>
+              </div>
+              <div style="height: 4px; background: rgba(255,255,255,0.03); border-radius: 2px; overflow: hidden;">
+                <div id="allocation-breath-bar" style="width: 18%; height: 100%; background: var(--neon-blue); box-shadow: 0 0 6px var(--neon-blue-glow);"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; color: var(--text-secondary);">
+                <span>Ambient Music Listening</span>
+                <span id="allocation-meditation-pct" style="font-family: 'JetBrains Mono', monospace; color: var(--neon-pink);">10%</span>
+              </div>
+              <div style="height: 4px; background: rgba(255,255,255,0.03); border-radius: 2px; overflow: hidden;">
+                <div id="allocation-meditation-bar" style="width: 10%; height: 100%; background: var(--neon-pink); box-shadow: 0 0 6px var(--neon-pink-glow);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Productivity Trends & Insights Card -->
+        <div class="glass-panel blue-glow" style="padding: 16px;">
+          <span class="tech-label blue">Focus Trends</span>
+          <h2>Focus Patterns</h2>
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.02); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.03);">
+              <i data-lucide="sun" style="color: var(--neon-blue); width: 18px; height: 18px;"></i>
+              <div style="display: flex; flex-direction: column;">
+                <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Most Productive Hours</span>
+                <span id="trend-peak-time" style="font-size: 13px; font-weight: 600; color: var(--text-primary);">9:00 AM - 11:30 AM</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.02); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.03);">
+              <i data-lucide="trending-up" style="color: var(--neon-purple); width: 18px; height: 18px;"></i>
+              <div style="display: flex; flex-direction: column;">
+                <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Weekly Trend</span>
+                <span id="trend-velocity" style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Steady & Consistent</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.02); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.03);">
+              <i data-lucide="calendar" style="color: var(--neon-pink); width: 18px; height: 18px;"></i>
+              <div style="display: flex; flex-direction: column;">
+                <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Daily Average Focus</span>
+                <span id="trend-daily-avg" style="font-size: 13px; font-weight: 600; color: var(--text-primary);">4.9 hrs / active day</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= SCREEN 3: CYBER WELLNESS ================= -->
+      <div id="screen-wellness" class="screen">
+        <header class="app-header" style="margin-bottom: 16px;">
+          <div class="user-info">
+            <span class="tech-label pink">Mindfulness</span>
+            <h1>Focus Sounds & Breathing</h1>
+            <p>Calming focus sounds and breathing exercises.</p>
+          </div>
+        </header>
+
+        <!-- Dynamic Box Breathing Exercise Coach -->
+        <div class="glass-panel purple-glow breathing-card">
+          <span class="tech-label">Mindful Breathing</span>
+          
+          <div class="breathing-circle-outer">
+            <div class="breathing-circle-inner" id="wellness-breath-sphere"></div>
+          </div>
+          
+          <span class="breathing-state-text" id="wellness-breath-state">Ready to Breathe?</span>
+          <span class="breathing-sub-text" id="wellness-breath-sub">Take a moment to calm your mind</span>
+          
+          <button class="breathing-control-btn" id="wellness-breath-btn">Start Breathing</button>
+        </div>
+
+        <!-- Focus Sounds Synthesizer Panel -->
+        <div class="glass-panel blue-glow">
+          <span class="tech-label blue">Focus Sounds</span>
+          <h2>Focus Sounds</h2>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Calming background sounds. Pick your favorites, unmute, and relax.</p>
+          
+          <!-- Real-time Web Audio Spectrogram Visualizer -->
+          <div class="visualizer-container" style="position: relative; margin-bottom: 16px; border-radius: var(--radius-md); overflow: hidden; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.04); padding: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--neon-blue); letter-spacing: 0.1em;">
+              <span>SOUND SPECTRUM</span>
+            </div>
+            <canvas id="sound-visualizer-canvas" style="width: 100%; height: 50px; display: block; filter: drop-shadow(0 0 4px rgba(6, 182, 212, 0.2));"></canvas>
+          </div>
+          
+          <!-- Now Playing Interactive Feedback Bar -->
+          <div id="soundscapes-now-playing-banner" class="soundscapes-now-playing-banner" style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.04); padding: 10px 14px; border-radius: var(--radius-md); font-family: 'JetBrains Mono', monospace; font-size: 11px; transition: var(--transition-smooth); opacity: 0.7;">
+            <span class="pulsing-dot" style="width: 6px; height: 6px; background: var(--text-muted); border-radius: 50%; display: inline-block;"></span>
+            <span id="now-playing-status-text" style="color: var(--text-secondary);">All Focus Sounds Paused</span>
+          </div>
+
+          <div class="sound-toggle-list">
+            
+            <!-- Sound 1: Brown Noise -->
+            <div class="sound-toggle-card" id="card-brownnoise">
+              <div class="sound-info">
+                <div class="sound-icon-box">
+                  <i data-lucide="waves"></i>
+                </div>
+                <div class="sound-details">
+                  <span class="sound-title">Brown Noise</span>
+                  <span class="sound-description">Deep steady noise for concentration</span>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="sound-wave-anim" style="display: none;">
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                </div>
+                <label class="neon-switch">
+                  <input type="checkbox" id="toggle-brownnoise">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              <div class="volume-slider-container">
+                <input type="range" id="vol-brownnoise" min="0" max="1" step="0.05" value="0.4" style="width: 100%;">
+              </div>
+            </div>
+
+            <!-- Sound 2: Rain Sounds -->
+            <div class="sound-toggle-card purple" id="card-rain">
+              <div class="sound-info">
+                <div class="sound-icon-box">
+                  <i data-lucide="cloud-rain"></i>
+                </div>
+                <div class="sound-details">
+                  <span class="sound-title">Rain Sounds</span>
+                  <span class="sound-description">Soft rainfall for calm focus</span>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="sound-wave-anim" style="display: none;">
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                </div>
+                <label class="neon-switch purple">
+                  <input type="checkbox" id="toggle-rain">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              <div class="volume-slider-container">
+                <input type="range" id="vol-rain" min="0" max="1" step="0.05" value="0.3" style="width: 100%;">
+              </div>
+            </div>
+
+            <!-- Sound 3: Ocean Waves -->
+            <div class="sound-toggle-card" id="card-ocean">
+              <div class="sound-info">
+                <div class="sound-icon-box">
+                  <i data-lucide="waves"></i>
+                </div>
+                <div class="sound-details">
+                  <span class="sound-title">Ocean Waves</span>
+                  <span class="sound-description">Gentle waves for relaxation</span>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="sound-wave-anim" style="display: none;">
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                </div>
+                <label class="neon-switch">
+                  <input type="checkbox" id="toggle-ocean">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              <div class="volume-slider-container">
+                <input type="range" id="vol-ocean" min="0" max="1" step="0.05" value="0.3" style="width: 100%;">
+              </div>
+            </div>
+
+            <!-- Sound 4: Lo-Fi Focus -->
+            <div class="sound-toggle-card purple" id="card-lofi">
+              <div class="sound-info">
+                <div class="sound-icon-box">
+                  <i data-lucide="music"></i>
+                </div>
+                <div class="sound-details">
+                  <span class="sound-title">Lo-Fi Focus</span>
+                  <span class="sound-description">Calm beats for studying and work</span>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="sound-wave-anim" style="display: none;">
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                  <span class="sound-wave-bar"></span>
+                </div>
+                <label class="neon-switch purple">
+                  <input type="checkbox" id="toggle-lofi">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              <div class="volume-slider-container">
+                <input type="range" id="vol-lofi" min="0" max="1" step="0.05" value="0.4" style="width: 100%;">
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= SCREEN 4: HISTORY LOGS ================= -->
+      <div id="screen-history" class="screen">
+        <header class="app-header" style="margin-bottom: 20px;">
+          <div class="user-info">
+            <span class="tech-label">Focus History</span>
+            <h1>Focus History</h1>
+            <p>A complete history of your focus sessions.</p>
+          </div>
+        </header>
+
+        <!-- History Sessions List -->
+        <div class="history-list" id="history-items-wrap">
+          <!-- Loaded dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- ================= SCREEN 5: FUTURISTIC AUTHENTICATION ================= -->
+      <div id="screen-auth" class="screen">
+        <div class="auth-container">
+          <div class="auth-logo-glow">
+            <i data-lucide="shield-check" style="width: 36px; height: 36px; color: var(--neon-purple);"></i>
+          </div>
+          
+          <div class="auth-card glass-panel purple-glow active" id="auth-login-card">
+            <span class="tech-label">Welcome Back</span>
+            <h2>Sign In</h2>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">Sign in to access your personal dashboard.</p>
+            
+            <form id="login-form" class="auth-form">
+              <div class="input-glow-wrap">
+                <i data-lucide="mail" class="input-icon"></i>
+                <input type="email" id="login-email" placeholder="Email Address" required autocomplete="username">
+              </div>
+              <div class="input-glow-wrap" style="margin-top: 14px;">
+                <i data-lucide="key-round" class="input-icon"></i>
+                <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password">
+              </div>
+              
+              <div class="auth-error-msg" id="login-error-msg" style="display: none;"></div>
+              
+              <button type="submit" class="btn-glowing-glow" style="margin-top: 24px; padding: 14px;">
+                <i data-lucide="unlock" style="width: 16px; height: 16px;"></i>
+                <span>Sign In</span>
+              </button>
+            </form>
+            
+            <div class="auth-switch-link" style="margin-top: 20px; text-align: center;">
+              <span style="font-size: 12px; color: var(--text-secondary);">New to FocusZen?</span>
+              <a href="#" id="go-to-signup" style="font-size: 12px; color: var(--neon-blue); font-weight: 600; text-decoration: none; margin-left: 6px; border-bottom: 1px dashed var(--neon-blue);">Create Profile</a>
+            </div>
+          </div>
+          
+          <div class="auth-card glass-panel blue-glow" id="auth-signup-card" style="display: none;">
+            <span class="tech-label blue">Create Profile</span>
+            <h2>Create Account</h2>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">Create a new profile to track your mindfulness journey.</p>
+            
+            <form id="signup-form" class="auth-form">
+              <div class="input-glow-wrap">
+                <i data-lucide="user" class="input-icon"></i>
+                <input type="text" id="signup-username" placeholder="Username" required autocomplete="name">
+              </div>
+              <div class="input-glow-wrap" style="margin-top: 14px;">
+                <i data-lucide="mail" class="input-icon"></i>
+                <input type="email" id="signup-email" placeholder="Email Address" required autocomplete="username">
+              </div>
+              <div class="input-glow-wrap" style="margin-top: 14px;">
+                <i data-lucide="key-round" class="input-icon"></i>
+                <input type="password" id="signup-password" placeholder="Password" required autocomplete="new-password">
+              </div>
+              
+              <div class="auth-error-msg" id="signup-error-msg" style="display: none;"></div>
+              
+              <button type="submit" class="btn-glowing-glow" style="margin-top: 24px; padding: 14px; background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));">
+                <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i>
+                <span>Create Account</span>
+              </button>
+            </form>
+            
+            <div class="auth-switch-link" style="margin-top: 20px; text-align: center;">
+              <span style="font-size: 12px; color: var(--text-secondary);">Already registered?</span>
+              <a href="#" id="go-to-login" style="font-size: 12px; color: var(--neon-purple); font-weight: 600; text-decoration: none; margin-left: 6px; border-bottom: 1px dashed var(--neon-purple);">Sign In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= SCREEN 6: FUTURISTIC SYSTEM SETTINGS ================= -->
+      <div id="screen-settings" class="screen">
+        <header class="app-header" style="margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <button id="settings-back-btn" class="header-icon-btn" title="Back to Home">
+              <i data-lucide="arrow-left"></i>
+            </button>
+            <div class="user-info">
+              <span class="tech-label">Settings</span>
+              <h1>App Settings</h1>
+            </div>
+          </div>
+        </header>
+
+        <!-- Current Profile Panel -->
+        <div class="glass-panel purple-glow" style="padding: 16px; margin-bottom: 16px;">
+          <span class="tech-label">Your Profile</span>
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: 10px;">
+            <div class="avatar-glow" style="width: 48px; height: 48px;">
+              <img src="assets/shreya_avatar.png" alt="User Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover; border:2px solid var(--bg-darker);" id="settings-user-avatar">
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <span id="settings-profile-name" style="font-size: 16px; font-weight: 700; color: var(--text-primary);">Shreya</span>
+              <span id="settings-profile-email" style="font-size: 12px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace;">shreya@focuszen.ai</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Focus Diagnostics Options Panel -->
+        <div class="glass-panel blue-glow" style="padding: 16px; margin-bottom: 16px;">
+          <span class="tech-label blue">Focus Settings</span>
+          <h3 style="font-size: 14px; margin-top: 10px; margin-bottom: 8px; color: var(--text-primary);">Pomodoro Session Length</h3>
+          
+          <div class="settings-duration-grid">
+            <button class="duration-btn" data-duration="15">15 Min</button>
+            <button class="duration-btn active" data-duration="25">25 Min</button>
+            <button class="duration-btn" data-duration="40">40 Min</button>
+            <button class="duration-btn" data-duration="60">60 Min</button>
+          </div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text-primary);">AI Coach</span>
+              <span style="font-size: 11px; color: var(--text-secondary);">Warm encouragement and focus tips</span>
+            </div>
+            <label class="neon-switch">
+              <input type="checkbox" id="settings-toggle-ai" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- sensory aesthetic Panel -->
+        <div class="glass-panel" style="padding: 16px; margin-bottom: 16px;">
+          <span class="tech-label pink">Preferences</span>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.04);">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Ambient Sounds Master Switch</span>
+              <span style="font-size: 11px; color: var(--text-secondary);">Enable background sounds during sessions</span>
+            </div>
+            <label class="neon-switch purple">
+              <input type="checkbox" id="settings-toggle-sound" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.04);">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Visual Notifications</span>
+              <span style="font-size: 11px; color: var(--text-secondary);">Gently flash the screen when your timer ends</span>
+            </div>
+            <label class="neon-switch">
+              <input type="checkbox" id="settings-toggle-notifications" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Deep Dark Mode</span>
+              <span style="font-size: 11px; color: var(--text-secondary);">Use a solid dark background to reduce eye strain</span>
+            </div>
+            <label class="neon-switch purple">
+              <input type="checkbox" id="settings-toggle-dark-theme" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Gemini AI Uplink Core Panel -->
+        <div class="glass-panel blue-glow" style="padding: 16px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="sparkles" style="color: var(--neon-blue); width: 16px; height: 16px;"></i>
+              <span class="tech-label blue" style="margin: 0; font-size: 10px; font-weight: 700; letter-spacing: 0.05em;">AI Coach Setup</span>
+            </div>
+            <span class="tech-label" style="margin: 0; font-size: 8px; padding: 2px 6px; border-radius: 4px; color: var(--neon-purple); border: 1px solid rgba(168, 85, 247, 0.2); background: rgba(168, 85, 247, 0.05); font-family: 'JetBrains Mono', monospace;" id="demo-mode-badge-label">DEMO ACTIVE</span>
+          </div>
+          <h3 style="font-size: 13px; margin-top: 10px; margin-bottom: 8px; color: var(--text-primary);">Gemini API Key (Optional)</h3>
+          
+          <div class="input-glow-wrap" style="position: relative;">
+            <i data-lucide="key-round" class="input-icon" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); width: 16px; height: 16px;"></i>
+            <input type="password" id="settings-gemini-key" placeholder="Paste your Gemini API Key" style="width: 100%; padding: 12px 12px 12px 38px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); color: var(--text-primary); font-family: 'JetBrains Mono', monospace; font-size: 12px; outline: none; transition: var(--transition-smooth);">
+          </div>
+          
+          <div style="display: flex; gap: 10px; margin-top: 14px;">
+            <button id="save-gemini-key-btn" class="duration-btn active" style="flex: 1; border-radius: var(--radius-md); padding: 10px; font-size: 12px; font-weight: 600; cursor: pointer;">Save Key</button>
+            <button id="clear-gemini-key-btn" class="duration-btn" style="flex: 1; border-radius: var(--radius-md); padding: 10px; font-size: 12px; font-weight: 600; color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.2); background: transparent; cursor: pointer;">Clear Key</button>
+          </div>
+          
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04);">
+            <span style="font-size: 11px; color: var(--text-secondary);">Status:</span>
+            <span id="gemini-uplink-status-badge" class="tech-label" style="margin: 0; font-size: 8px; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-muted); background: rgba(255,255,255,0.02); font-family: 'JetBrains Mono', monospace;">COACH OFFLINE</span>
+          </div>
+        </div>
+
+        <!-- App Reset & Admin Options Panel -->
+        <div class="glass-panel" style="padding: 16px; margin-bottom: 16px; border-color: rgba(244, 63, 94, 0.15);">
+          <span class="tech-label pink">Danger Zone</span>
+          <h3 style="font-size: 13px; margin-top: 10px; margin-bottom: 6px; color: var(--text-primary);">Reset Application Data</h3>
+          <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">This will permanently clear your focus history, streak progress, and settings stored in localStorage.</p>
+          <button id="settings-reset-data-btn" class="settings-logout-btn" style="border-color: rgba(244, 63, 94, 0.3); color: #f43f5e; background: rgba(244, 63, 94, 0.02); margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+            <span>Reset All Data</span>
+          </button>
+        </div>
+
+        <!-- Disconnect / Logout Action Button -->
+        <div style="margin-top: 24px; margin-bottom: 12px;">
+          <button id="settings-logout-btn" class="settings-logout-btn">
+            <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= SCREEN 7: FUTURISTIC SYSTEM NOTIFICATIONS ================= -->
+      <div id="screen-notifications" class="screen">
+        <header class="app-header" style="margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <button id="notifications-back-btn" class="header-icon-btn" title="Back to Home">
+              <i data-lucide="arrow-left"></i>
+            </button>
+            <div class="user-info">
+              <span class="tech-label pink">Alerts</span>
+              <h1>Notifications</h1>
+            </div>
+          </div>
+        </header>
+
+        <!-- Notification Channel toggles -->
+        <div class="glass-panel purple-glow" style="padding: 16px; margin-bottom: 16px;">
+          <span class="tech-label">Notification Preferences</span>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.04);">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Rest Reminders</span>
+              <span style="font-size: 11px; color: var(--text-secondary);">Remind me when it is time to take a break</span>
+            </div>
+            <label class="neon-switch">
+              <input type="checkbox" id="notif-toggle-break" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.04);">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Daily Reminders</span>
+              <span style="font-size: 11px; color: var(--text-secondary);">Help me keep my focus streak alive</span>
+            </div>
+            <label class="neon-switch purple">
+              <input type="checkbox" id="notif-toggle-streak" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Mindful Tips</span>
+              <span style="font-size: 11px; color: var(--text-secondary);">Receive positive motivation during the day</span>
+            </div>
+            <label class="neon-switch">
+              <input type="checkbox" id="notif-toggle-ai" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Scrollable Alerts list -->
+        <div class="glass-panel blue-glow" style="padding: 16px; margin-bottom: 16px; flex: 1; display: flex; flex-direction: column; min-height: 380px;">
+          <span class="tech-label blue">Alert Logs</span>
+          <h2>Notifications Feed</h2>
+          
+          <div class="notifications-feed" id="notification-items-wrap" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; max-height: 400px; padding-right: 4px;">
+            <!-- Loaded dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Disconnect / Clear Cache -->
+        <div style="margin-top: 16px; margin-bottom: 12px;">
+          <button id="clear-notifications-btn" class="settings-logout-btn" style="border-color: rgba(236, 72, 153, 0.2); color: var(--neon-pink);">
+            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+            <span>Clear All Notifications</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= IMMERSIVE FOCUS PORTAL OVERLAY ================= -->
+    <div class="focus-portal" id="focus-portal">
+      <!-- Portal Top Header bar -->
+      <div class="portal-header">
+        <div class="portal-logo">
+          <i data-lucide="shield-check" id="portal-category-icon"></i>
+          <span id="portal-category-title">Focus Session</span>
+        </div>
+        <button class="portal-close-btn" id="portal-close" title="Stop Session">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <!-- Fullscreen Immersive Breathing & Timer Ring -->
+      <div class="portal-breathing-ring inhale" id="portal-breath-ring">
+        <svg viewBox="0 0 200 200" style="position: absolute; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; z-index: 5; pointer-events: none;">
+          <circle cx="100" cy="100" r="94" fill="none" stroke="rgba(255, 255, 255, 0.02)" stroke-width="4" />
+          <circle id="portal-ring-fill" cx="100" cy="100" r="94" fill="none" stroke="url(#zenGradient)" stroke-width="4" stroke-linecap="round" stroke-dasharray="590.6" stroke-dashoffset="0" style="transition: stroke-dashoffset 1s linear; filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));" />
+        </svg>
+        <div class="portal-timer-circle">
+          <span class="portal-countdown" id="portal-time-display">25:00</span>
+          <span class="portal-countdown-label">Time Remaining</span>
+        </div>
+      </div>
+
+      <!-- Detail descriptors -->
+      <h2 class="portal-title">You are in flow</h2>
+      <p class="portal-desc">Enjoying the quiet. Take deep, steady breaths.</p>
+
+      <!-- Active Frequencies Sound indicator -->
+      <div class="portal-sound-indicator">
+        <i data-lucide="volume-2" id="portal-sound-icon" style="width: 14px; height: 14px; animation: pulseGlow 1.2s infinite alternate;"></i>
+        <span id="portal-sound-text">Sound Muted</span>
+      </div>
+
+      <!-- Interactive Portal Web Audio Spectrogram Visualizer -->
+      <div class="portal-visualizer-wrap" style="width: 220px; margin: 12px auto; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--radius-md); padding: 6px;">
+        <canvas id="portal-visualizer-canvas" style="width: 100%; height: 32px; display: block; filter: drop-shadow(0 0 6px var(--neon-purple-glow));"></canvas>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="portal-actions">
+        <button class="portal-btn pause" id="portal-pause">Pause</button>
+        <button class="portal-btn reset" id="portal-reset" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); color: var(--text-secondary);">Reset</button>
+        <button class="portal-btn cancel" id="portal-cancel">Cancel</button>
+      </div>
+    </div>
+
+    <!-- ================= IMMERSIVE BREATHING PORTAL OVERLAY ================= -->
+    <div class="focus-portal" id="breathing-portal" style="display: none; background: radial-gradient(circle at center, rgba(13, 10, 31, 0.98) 0%, rgba(5, 3, 15, 0.99) 100%);">
+      <!-- Portal Top Header bar -->
+      <div class="portal-header">
+        <div class="portal-logo">
+          <i data-lucide="wind" style="color: var(--neon-blue);"></i>
+          <span>Mindful Breathing</span>
+        </div>
+        <button class="portal-close-btn" id="breathing-close" title="Exit">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <!-- Centered Breathing Orb -->
+      <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;">
+        <div class="breathing-orb-container" style="position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center;">
+          <div id="breathing-orb" class="breathing-orb-sphere" style="width: 130px; height: 130px; border-radius: 50%; background: radial-gradient(circle, rgba(6, 182, 212, 0.85) 0%, rgba(168, 85, 247, 0.65) 100%); box-shadow: 0 0 40px rgba(6, 182, 212, 0.5), 0 0 80px rgba(168, 85, 247, 0.3); transition: transform 4s ease-in-out, background 1s ease, box-shadow 1s ease;"></div>
+          <!-- Pulse Rings -->
+          <div class="breathing-ring-pulse"></div>
+        </div>
+        
+        <div style="text-align: center; padding: 0 20px;">
+          <span class="breathing-state-text" id="breathing-portal-state">Breathe In</span>
+          <p class="breathing-sub-text" id="breathing-portal-sub">Inhale deep, calming oxygen</p>
+        </div>
+
+        <!-- Breathing countdown timer -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-family: 'JetBrains Mono', monospace;">
+          <span id="breathing-portal-timer" style="font-size: 28px; font-weight: 700; color: var(--neon-blue); text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);">01:00</span>
+          <span style="font-size: 8px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase;">Timer</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="portal-actions" style="margin-bottom: 30px;">
+        <button class="portal-btn pause" id="breathing-portal-action">Pause Exercise</button>
+      </div>
+    </div>
+
+    <!-- ================= CATEGORY SELECTION POPUP ================= -->
+    <div class="completion-popup" id="category-select-popup" style="display: none;">
+      <div class="completion-card glass-panel blue-glow" style="max-width: 320px; padding: 24px;">
+        <div class="portal-logo" style="justify-content: center; gap: 8px; margin-bottom: 8px;">
+          <i data-lucide="target" style="color: var(--neon-blue);"></i>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--neon-blue); letter-spacing: 0.1em; text-transform: uppercase;">SELECT FOCUS CATEGORY</span>
+        </div>
+        <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); text-align: center;">What are we focusing on?</h2>
+        
+        <div class="category-options-grid" style="display: flex; flex-direction: column; gap: 10px; width: 100%; margin-bottom: 20px;">
+          <div class="goal-option active" data-category="deep-work" style="padding: 10px 14px; display: flex; align-items: center; gap: 14px; border-radius: var(--radius-md); background: rgba(6, 182, 212, 0.08); border: 1px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer;">
+            <i data-lucide="brain" style="width: 16px; height: 16px;"></i>
+            <span style="font-size: 13px; font-weight: 600;">Deep Work</span>
+          </div>
+          <div class="goal-option" data-category="study" style="padding: 10px 14px; display: flex; align-items: center; gap: 14px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04); color: var(--text-secondary); cursor: pointer;">
+            <i data-lucide="book-open" style="width: 16px; height: 16px;"></i>
+            <span style="font-size: 13px; font-weight: 600;">Study Session</span>
+          </div>
+          <div class="goal-option" data-category="coding" style="padding: 10px 14px; display: flex; align-items: center; gap: 14px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04); color: var(--text-secondary); cursor: pointer;">
+            <i data-lucide="terminal" style="width: 16px; height: 16px;"></i>
+            <span style="font-size: 13px; font-weight: 600;">Coding Sprint</span>
+          </div>
+          <div class="goal-option" data-category="reading" style="padding: 10px 14px; display: flex; align-items: center; gap: 14px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04); color: var(--text-secondary); cursor: pointer;">
+            <i data-lucide="book" style="width: 16px; height: 16px;"></i>
+            <span style="font-size: 13px; font-weight: 600;">Reading Flow</span>
+          </div>
+          <div class="goal-option" data-category="meditation" style="padding: 10px 14px; display: flex; align-items: center; gap: 14px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04); color: var(--text-secondary); cursor: pointer;">
+            <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
+            <span style="font-size: 13px; font-weight: 600;">Meditation</span>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 10px; width: 100%;">
+          <button class="onboarding-btn finish-btn" id="category-select-cancel-btn" style="flex: 1; padding: 10px; font-size: 12px; border: 1px solid rgba(255,255,255,0.06); background: transparent; color: var(--text-secondary); margin-top: 0; box-shadow: none; cursor: pointer;">Cancel</button>
+          <button class="onboarding-btn finish-btn" id="category-select-confirm-btn" style="flex: 1; padding: 10px; font-size: 12px; margin-top: 0; background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple)); color: var(--text-primary); cursor: pointer;">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SESSION COMPLETION POPUP ================= -->
+    <div class="completion-popup" id="completion-popup">
+      <div class="completion-card glass-panel purple-glow">
+        <div class="completion-icon-wrap">
+          <i data-lucide="award"></i>
+        </div>
+        <h2>Focus Session Complete!</h2>
+        <p>Awesome work! You stayed focused.</p>
+        
+        <!-- Dynamic Gemini Session Analysis -->
+        <div id="completion-ai-coaching" class="completion-ai-feedback-box" style="margin: 12px 0; background: rgba(168, 85, 247, 0.06); border: 1px dashed rgba(168, 85, 247, 0.25); border-radius: var(--radius-md); padding: 10px 14px; font-size: 11px; line-height: 1.5; color: var(--text-secondary); text-align: left; position: relative; overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: #e9d5ff; margin-bottom: 6px;">
+            <i data-lucide="brain" style="width: 12px; height: 12px; color: var(--neon-purple);"></i>
+            <span>Coach's Note</span>
+          </div>
+          <div id="completion-ai-text" style="font-style: italic;">Preparing a note for you...</div>
+        </div>
+        
+        <div class="rewards-grid">
+          <div class="reward-item">
+            <span class="reward-val" id="reward-time-val">+25m</span>
+            <span class="reward-lbl">Focused Time</span>
+          </div>
+          <div class="reward-item">
+            <span class="reward-val" id="reward-score-val">+4%</span>
+            <span class="reward-lbl">Focus Score</span>
+          </div>
+          <div class="reward-item">
+            <span class="reward-val" id="reward-streak-val">+1d</span>
+            <span class="reward-lbl">Streak Active</span>
+          </div>
+        </div>
+        
+        <button class="completion-btn" id="completion-claim-btn">
+          <span>Awesome</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Premium Bottom Glassmorphic Navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" id="nav-home">
+        <i data-lucide="home"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" id="nav-analytics">
+        <i data-lucide="bar-chart-2"></i>
+        <span>Stats</span>
+      </button>
+      <button class="nav-item" id="nav-wellness">
+        <i data-lucide="activity"></i>
+        <span>Relax</span>
+      </button>
+      <button class="nav-item" id="nav-history">
+        <i data-lucide="archive"></i>
+        <span>History</span>
+      </button>
+    </nav>
+
+    <!-- Simulated Phone Virtual Home Bar -->
+    <div class="home-bar"></div>
+
+  </div>
+
+  <script src="js/constants.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
