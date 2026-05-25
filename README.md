@@ -114,7 +114,7 @@ FocusZen AI is designed to run 100% serverless, requiring zero database installs
    ```bash
    npx http-server -p 8888 -c-1
    ```
-4. Open your browser and navigate to: **[http://localhost:8888](http://localhost:8888)**
+4. Open your browser and navigate to: **https://focuszen-ai.netlify.app/**
 
 ### Option 2: Serverless Double-Click Launch
 1. Double-click `index.html` on your computer.
