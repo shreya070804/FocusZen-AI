@@ -868,6 +868,7 @@ Construct a hyper-personalized, warm, and friendly 2-sentence congratulation for
         if (selectPopup) {
           Services.getAudioContext();
           selectPopup.style.display = 'flex';
+          setTimeout(() => selectPopup.classList.add('active'), 10);
         }
       });
     }
@@ -905,7 +906,12 @@ Construct a hyper-personalized, warm, and friendly 2-sentence congratulation for
     if (cancelSelectBtn) {
       cancelSelectBtn.addEventListener('click', () => {
         const selectPopup = document.getElementById('category-select-popup');
-        if (selectPopup) selectPopup.style.display = 'none';
+        if (selectPopup) {
+          selectPopup.classList.remove('active');
+          setTimeout(() => {
+            selectPopup.style.display = 'none';
+          }, 300);
+        }
       });
     }
 
@@ -914,7 +920,10 @@ Construct a hyper-personalized, warm, and friendly 2-sentence congratulation for
     if (confirmSelectBtn) {
       confirmSelectBtn.addEventListener('click', () => {
         const selectPopup = document.getElementById('category-select-popup');
-        if (selectPopup) selectPopup.style.display = 'none';
+        if (selectPopup) {
+          selectPopup.classList.remove('active');
+          selectPopup.style.display = 'none';
+        }
 
         const activeOpt = document.querySelector('.category-options-grid .goal-option.active');
         const cat = activeOpt ? activeOpt.getAttribute('data-category') : 'deep-work';

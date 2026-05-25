@@ -4,6 +4,45 @@ FocusZen AI is a dark, futuristic, high-fidelity productivity dashboard and cogn
 
 ---
 
+## 📱 Immersive Interface Showcase
+
+### 1. Productivity Hub (Home Dashboard)
+*Discover a unified holographic interface designed to shield you from digital noise and align focus:*
+
+| Home Dashboard Top | Home Dashboard Bottom | AI Coach Chat |
+| :---: | :---: | :---: |
+| ![FocusZen AI - Home Dashboard Top](screenshots/dashboard_home_top.png) | ![FocusZen AI - Home Dashboard Bottom](screenshots/dashboard_home_bottom.png) | ![FocusZen AI - AI Coach Chat](screenshots/ai_coach_chat.png) |
+
+---
+
+### 2. Cognitive Analytics & Progression (Stats)
+*Track your workflow coherence, achievements, and focus telemetry in real-time:*
+
+| Analytics Overview | Milestones & Badges Grid | Focus Trends & Patterns |
+| :---: | :---: | :---: |
+| ![FocusZen AI - Analytics Dashboard](screenshots/analytics_dashboard.png) | ![FocusZen AI - Milestones & Badges](screenshots/milestones_badges.png) | ![FocusZen AI - Focus Trends](screenshots/focus_trends_patterns.png) |
+
+---
+
+### 3. Cyber-Wellness & Relaxation Portal (Relax)
+*Procedural ambient soundscapes and paced biometric chest box-breathing guides:*
+
+| Mindful Breathing Orb | Ambient Soundscape Control |
+| :---: | :---: |
+| ![FocusZen AI - Breathing Orb](screenshots/relax_breathing_orb.png) | ![FocusZen AI - Soundscapes Synth](screenshots/relax_focus_sounds.png) |
+
+---
+
+### 4. History Loggers & Configuration Panel
+*Zero-loss state persistence, dynamic alert feeds, and Gemini API setup:*
+
+| Immersive Focus History | Alerts & Notifications | Futuristic App Settings |
+| :---: | :---: | :---: |
+| ![FocusZen AI - Focus History](screenshots/focus_history.png) | ![FocusZen AI - Alerts and Toast Logs](screenshots/notifications_alerts.png) | ![FocusZen AI - App Settings](screenshots/app_settings.png) |
+
+---
+
+
 ## 🚀 Key Features & Architectural Uplinks
 
 ### 1. Immersive Guided Breathing Portal
