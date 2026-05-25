@@ -15,7 +15,16 @@ FocusZen AI is a dark, futuristic, high-fidelity productivity dashboard and cogn
 
 ---
 
-### 2. Cognitive Analytics & Progression (Stats)
+### 2. Immersive Focus Session Portal
+*Experience a highly visual focus zone featuring glowing dynamic chest breathing guides and real-time audio spectrograms:*
+
+| Category Selection Modal | Immersive Focus Active |
+| :---: | :---: |
+| ![FocusZen AI - Category Selection Modal](screenshots/category_selection.png) | ![FocusZen AI - Immersive Focus Portal Active](screenshots/immersive_focus_portal.png) |
+
+---
+
+### 3. Cognitive Analytics & Progression (Stats)
 *Track your workflow coherence, achievements, and focus telemetry in real-time:*
 
 | Analytics Overview | Milestones & Badges Grid | Focus Trends & Patterns |
@@ -24,7 +33,7 @@ FocusZen AI is a dark, futuristic, high-fidelity productivity dashboard and cogn
 
 ---
 
-### 3. Cyber-Wellness & Relaxation Portal (Relax)
+### 4. Cyber-Wellness & Relaxation Portal (Relax)
 *Procedural ambient soundscapes and paced biometric chest box-breathing guides:*
 
 | Mindful Breathing Orb | Ambient Soundscape Control |
@@ -33,7 +42,7 @@ FocusZen AI is a dark, futuristic, high-fidelity productivity dashboard and cogn
 
 ---
 
-### 4. History Loggers & Configuration Panel
+### 5. History Loggers & Configuration Panel
 *Zero-loss state persistence, dynamic alert feeds, and Gemini API setup:*
 
 | Immersive Focus History | Alerts & Notifications | Futuristic App Settings |
